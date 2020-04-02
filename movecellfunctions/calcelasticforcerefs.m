@@ -1,5 +1,11 @@
 % The classic function to calculate force due to fiber elasticity from a
-% discrete collection of points. 
+% discrete collection of points, but this time with reference points that
+% come from re-meshing. 
+% Inputs: r = reference radius, (x,y) = current points on the contour, 
+% gam = surface tension, k = tension constant, x0 = reference
+% configurations
+% Output: tension forces according to Section S2.1.1 in the supplementary
+% info
 function eforce = calcelasticforcerefs(r,x,y,gam,k,x0)
     N=length(x);
     eforce=zeros(N,2);

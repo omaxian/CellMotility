@@ -7,13 +7,16 @@
 function newlocs = correctPoints(points,xpoly,ypoly,np1in,cordist)
     np1=np1in;
     [in,edg]=inpolygon(points(:,1),points(:,2),[xpoly; xpoly(1)],[ypoly; ypoly(1)]);
-    while (sum(in-edg) > 0) % if it's inside, keep picking random vector until outside
-         inNode = find((in-edg)==1);
-         points(inNode,:)=points(inNode,:)-cordist*np1;
-         np1 = rand(1,2)-0.5;
-         np1 = np1/norm(np1);
-         points(inNode,:)=points(inNode,:)+cordist*np1;
-         [in,edg]=inpolygon(points(:,1),points(:,2),[xpoly; xpoly(1)],[ypoly; ypoly(1)]);
+    inds = find((in-edg) > 0);
+    for iInd=1:length(inds)
+        inNode = inds(iInd);
+        while (in(inNode)-edg(inNode) > 0) % if it's inside, keep picking random vector until outside
+            points(inNode,:)=points(inNode,:)-cordist*np1;
+            np1 = rand(1,2)-0.5;
+            np1 = np1/norm(np1);
+            points(inNode,:)=points(inNode,:)+cordist*np1;
+            [in,edg]=inpolygon(points(:,1),points(:,2),[xpoly; xpoly(1)],[ypoly; ypoly(1)]);
+        end
     end
     newlocs = points;
 end

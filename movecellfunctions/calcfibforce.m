@@ -2,7 +2,7 @@
 function fibforce=calcfibforce(curlocs,kteth,connections,reflocs)
     Nfib=length(connections);
     Npts=floor(length(curlocs)/Nfib+1e-2);
-    % First is the force due to the lattice. This is handled by subtracting
+    % First is "pinning down force". This is handled by subtracting
     % all the tethered locations. 
     fibforce=curlocs-reflocs; % Subtract the reference locations. 
     for iFib=1:Nfib

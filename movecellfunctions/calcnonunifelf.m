@@ -1,5 +1,18 @@
+% Calculate the elastic force when there is a reference confgiguration
+% (like after the cell has been re-meshed) AND a non-uniform tension
+% constant.
+% Inputs: (x,y) = current points on the contour, r = reference radius, 
+% Kb = bending constant in the regions where it exists (elsewhere it is 0), 
+% prot1 = where the first protrusion is bound, prot2 = where the second
+% protrusion is bound, (x0,y0) = reference configuration. 
+% (gamsoft, ksoft) = tension constants for the soft part of the cortex
+% (gamhard,khard)= tension constants for the hard (contracting) part of the cortex
+% We assign K_b to be Kb in the region behind prot1 and prot2 (inclusive), 
+% otherwise it's zero.
+% Output: elastic forces according to Section S2.1.1 in the supplementary
+% info
 function eforce = calcnonunifelf(r,x,y,x0,y0,gamsoft,gamhard,ksoft,khard,prot1,prot2)
-    nrl=0.1;
+    nrl=0.1; % the rest length is set to 0.1 in the hard region
     N=length(x);
     eforce=zeros(N,2);
     h=2*pi*r/N;

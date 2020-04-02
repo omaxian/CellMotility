@@ -22,7 +22,7 @@ hm=dthm*rm;
 if (loadecm)
     load(ecmfile); % If there is a file to load
 else
-    [fiberlocs,connections]=makeECM(numfibers,rc,rfib,nodebound,eps,fibspace); % clean, new ECM
+    [fiberlocs,connections]=makeECM(numfibers,rc,nodebound,eps,fibspace); % clean, new ECM
 end
 % The set up of the ECM is on the next 2 lines. ecmrefs is the intialized reference
 % locations. The point of that is for the fibers to be initially unmoving.
@@ -51,7 +51,6 @@ retracting=0;
 AcorError = 0;
 AnucError = 0;
 CorAR = 1;
-NucAR = 1;
 while (length(jPtslist) < length(ppoints))
     minnoded=10;
     % attached means if the cell is attached or not. So if it's not
@@ -88,10 +87,14 @@ while (length(jPtslist) < length(ppoints))
     % Routine force calculations
     % Nucleus force
     fnucel=calcelasticforce(rm,xm,ym,gamm,km);
-    if (~attached) % we give the nucleus a little bending rigidity when protrusions are forming
+    % If no physical bending rigidity, give the nucleus a small bending
+    % rigidity to prevent it from spilling out of the cortex
+    if (~attached && kbm < 1e-16)
+        fnucbend = calcbendingforce(xm,ym,rm,0.005);
+    else
         fnucbend = calcbendingforce(xm,ym,rm,kbm);
-        fnucel = fnucel+fnucbend;
     end
+    fnucel = fnucel+fnucbend;
     fnuctot=fnucel*hm; %Force/length in 2D
     % Cortex forces
     fcel=calcelasticforce(rc,xc,yc,gamc,kc);

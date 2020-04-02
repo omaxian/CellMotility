@@ -1,3 +1,9 @@
+% Calculate the bending force when there is a reference confgiguration
+% (like after the cell has been re-meshed). 
+% Inputs: (x,y) = current points on the contour, r = reference radius, 
+% Kb = bending constant, x0 = reference configuration
+% Output: bending forces according to Section S2.1.2 in the supplementary
+% info
 function bforce = calcbendingforcerefs(x,y,r,Kb,x0)
     N=length(x);
     h=2*pi*r/N;

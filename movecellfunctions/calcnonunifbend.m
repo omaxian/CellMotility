@@ -1,3 +1,14 @@
+% Calculate the bending force when there is a reference confgiguration
+% (like after the cell has been re-meshed) AND a non-uniform bending
+% constant.
+% Inputs: (x,y) = current points on the contour, r = reference radius, 
+% Kb = bending constant in the regions where it exists (elsewhere it is 0), 
+% prot1 = where the first protrusion is bound, prot2 = where the second
+% protrusion is bound, x0 = reference configuration. 
+% We assign K_b to be Kb in the region behind prot1 and prot2 (inclusive), 
+% otherwise it's zero.
+% Output: bending forces according to Section S2.1.2 in the supplementary
+% info
 function bforce = calcnonunifbend(x,y,r,x0,Kb,prot1,prot2)
     N=length(x);
     kap = 1/r;

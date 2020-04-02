@@ -1,6 +1,6 @@
 close all;
 addpath('movecellfunctions')
-Nc=25;
+Nc=50;
 rc=1;
 prot1=floor(Nc*0.75);
 prot2=ceil(Nc*0.25);
@@ -27,7 +27,7 @@ while (t < t_final+dt)
     end
     [force,pts4ten,ten]=meshCheckerForce(rc,pos(:,1),pos(:,2),x_new_ref(:,1),x_new_ref(:,2),...
         gamsoft,gamhard,ksoft,khard,prot1,prot2);
-    force = force+h*calcbendingforcerefs(pos(:,1),pos(:,2),rc,0.1,x_new_ref);
+    force = force+h*calcbendingforcerefs(pos(:,1),pos(:,2),rc,0,x_new_ref);
 %     sum(force)
     M=formMatrix(pos,h,1);
     f=zeros(length(pos)*2,1);
@@ -62,31 +62,4 @@ while (t < t_final+dt)
     t=t+dt;
     disp=[disp pos(prot1,1)];
 end
-
-function addforce=calcp0(xc,yc,force,rc)
-    % Calculate normals
-    normals=zeros(length(xc),2);
-    tsum=0;
-    N=length(xc);
-    h=2*pi*rc/N;
-    for iPt=1:N
-        indexm1=iPt-1;
-        if (indexm1==0)
-            indexm1=N;
-        end 
-        indexp1=iPt+1;
-        if (indexp1==N+1)
-            indexp1=1;
-        end 
-        tao=[xc(indexp1)-xc(indexm1); yc(indexp1)-yc(indexm1)]/(2*h);
-        tao=tao/norm(tao);
-        % Rotate 90 degrees
-        normals(iPt,:)=([0 -1; 1 0]*tao)';
-        tsum=tsum-dot(force(iPt,:),normals(iPt,:));
-    end
-    tsum=tsum*h;
-    p0=tsum/(2*pi*rc);
-    addforce=normals*p0;
-end
-    
     

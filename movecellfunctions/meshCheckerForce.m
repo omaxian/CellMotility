@@ -1,4 +1,6 @@
 % This is the force, not the force density. 
+% This force is calculated on a re-meshed fiber and is used to 
+% check the re-meshing algorithm. 
 function [eforce, pts4ten,tension] = meshCheckerForce(r,x,y,x0,y0,gamsoft,gamhard,ksoft,khard,prot1,prot2)
     nrl=0.5;
     N=length(x);
